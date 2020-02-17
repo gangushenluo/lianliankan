@@ -996,6 +996,7 @@
 </body>
 </html>
 <script>
+  var bodies=[]
   var map=document.getElementById("map")
   function createDiv(color){
     // 创建div节点
@@ -1013,6 +1014,24 @@
   var food=createDiv("red")
   // console.log(food)
   function move(){
+    if(bodies.length>0){
+      for(var i=0;i<bodies.length;i++){
+        switch(bodies[i].value){
+          case "left":
+            bodies[i].style.left=parseInt(bodies[i].style.left)-20+"px"
+            break
+          case "right":
+            bodies[i].style.left=parseInt(bodies[i].style.left)+20+"px"
+            break
+          case "top":
+            bodies[i].style.top=parseInt(bodies[i].style.top)-20+"px"
+            break
+          case "bottom":
+            bodies[i].style.top=parseInt(bodies[i].style.top)+20+"px"
+            break
+          }
+        }
+      }
     switch(snake.value){
       case "left":
         snake.style.left=parseInt(snake.style.left)-20+"px"
@@ -1027,11 +1046,47 @@
         snake.style.top=parseInt(snake.style.top)+20+"px"
         break
     }
-    // 如果碰上食物,刷新食物位置
+    
     if(snake.style.left==food.style.left&&snake.style.top==food.style.top){
+      
+      // 身体变长
+      var body=createDiv("yellow")
+      var last
+      
+      if(bodies.length>0){
+        last=bodies[bodies.length-1]
+      }else{
+        last=snake
+      }
+      
+      // console.log(last.value)
+      // if(snake.value=="left"){
+      //   body.style.left=parseInt(last.style.left)+20+"px"
+      // }
+      switch(last.value){
+        case "left":
+          body.style.left=parseInt(last.style.left)+20+"px"
+          body.style.top=last.style.top;
+          break
+        case "top":
+          body.style.top=parseInt(last.style.top)+20+"px"
+          body.style.left=last.style.left;
+          break
+        case "right":
+          body.style.left=parseInt(last.style.left)-20+"px"
+          body.style.top=last.style.top;
+          break
+        case "bottom":
+          body.style.top=parseInt(last.style.top)-20+"px"
+          body.style.left=last.style.left;
+          break
+      }
+      body.value=last.value
+      bodies.push(body)
+      
+      // 如果碰上食物,刷新食物位置
       food.style.left=parseInt(Math.random()*30)*20+"px"
       food.style.top=parseInt(Math.random()*30)*20+"px"
-      snake.style.width+=20+"px"
     }
   }
   
